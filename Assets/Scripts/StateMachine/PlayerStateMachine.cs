@@ -14,6 +14,7 @@ public class PlayerStateMachine : MonoBehaviour
     int _isWalkingHash;
     int _isRunningHash;
     int _isJumpingHash;
+    int _isFallingHash;
     bool _requireNewJumpPress;
     int _jumpCountHash;
 
@@ -31,7 +32,7 @@ public class PlayerStateMachine : MonoBehaviour
     public float _runMultiplier = 1.8f;
 
     //Gravity variables
-    float _gravity = -3f;
+    float _gravity = -4f;
     float _groundedGravity = -0.05f;
 
     //Jumping variables
@@ -61,12 +62,14 @@ public class PlayerStateMachine : MonoBehaviour
     public int IsRunningHash { get { return _isRunningHash; } }
     public int IsJumpingHash { get { return _isJumpingHash; } }
     public int JumpCountHash { get { return _jumpCountHash; } }
+    public int IsFallingHash { get { return _isFallingHash; } }
     public bool IsMovementPressed { get { return _isMovementPressed; } }
     public bool IsRunPressed { get { return _isRunPressed; } }
     public bool RequireNewJumpPress { get { return _requireNewJumpPress; } set { _requireNewJumpPress = value; } }
     public bool IsJumping { set { _isJumping = value; } }
     public bool IsJumpPressed { get { return _isJumpPressed; } }
     public float GroundedGravity { get { return _groundedGravity; } }
+    public float Gravity { get { return _gravity; } }
     public float CurrentMovementY { get { return _currentMovement.y; } set { _currentMovement.y = value; } }
     public float AppliedMovementY { get { return _appliedMovement.y; } set { _appliedMovement.y = value; } }
     public float AppliedMovementX { get { return _appliedMovement.x; } set { _appliedMovement.x = value; } }
@@ -90,6 +93,7 @@ public class PlayerStateMachine : MonoBehaviour
         _isRunningHash = Animator.StringToHash("isRunning");
         _isJumpingHash = Animator.StringToHash("isJumping");
         _jumpCountHash = Animator.StringToHash("jumpCount");
+        _isFallingHash = Animator.StringToHash("isFalling");
 
         // Detects movement player input from the character controller
         _playerInput.CharacterControls.Move.started += onMovementInput;
