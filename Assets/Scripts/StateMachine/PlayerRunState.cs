@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerRunState : PlayerBaseState
 {
     public PlayerRunState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
-        : base(currentContext, playerStateFactory) { }
+        : base(currentContext, playerStateFactory) {
+       
+    }
     public override void EnterState()
     {
         Ctx.Animator.SetBool(Ctx.IsWalkingHash, true);
@@ -18,6 +20,7 @@ public class PlayerRunState : PlayerBaseState
         Ctx.AppliedMovementX = Ctx.CurrentMovementInput.x * Ctx.RunMultiplier;
         Ctx.AppliedMovementZ = Ctx.CurrentMovementInput.y * Ctx.RunMultiplier;
         CheckSwitchStates();
+        InitializeSubState();
     }
 
     public override void ExitState()
@@ -27,7 +30,7 @@ public class PlayerRunState : PlayerBaseState
 
     public override void InitializeSubState()
     {
-
+      
     }
 
     public override void CheckSwitchStates()

@@ -6,7 +6,9 @@ public class PlayerWalkState : PlayerBaseState
 {
 
     public PlayerWalkState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
-        : base (currentContext, playerStateFactory)   {}
+        : base (currentContext, playerStateFactory)   {
+        
+    }
 
     public override void EnterState()
     {
@@ -19,6 +21,7 @@ public class PlayerWalkState : PlayerBaseState
         Ctx.AppliedMovementX = Ctx.CurrentMovementInput.x;
         Ctx.AppliedMovementZ = Ctx.CurrentMovementInput.y;
         CheckSwitchStates();
+        InitializeSubState();
     }
 
     public override void ExitState()

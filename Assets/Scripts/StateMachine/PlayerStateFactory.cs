@@ -10,7 +10,11 @@ enum PlayerStates
     run,
     grounded,
     jump,
-    fall
+    fall,
+    primaryfire,
+    secondaryfire,
+    special,
+    lockon
 }
 public class PlayerStateFactory 
 {
@@ -25,6 +29,10 @@ public class PlayerStateFactory
         _states[PlayerStates.jump] = new PlayerJumpState(_context, this);
         _states[PlayerStates.grounded] = new PlayerGroundedState(_context, this);
         _states[PlayerStates.fall] = new PlayerFallState(_context, this);
+        _states[PlayerStates.primaryfire] = new PlayerPrimaryFireState(_context, this);
+        _states[PlayerStates.secondaryfire] = new PlayerSecondaryFireState(_context, this);
+        _states[PlayerStates.special] = new PlayerPrimaryFireState(_context, this);
+        _states[PlayerStates.lockon] = new PlayerLockOnState(_context, this);
     }
 
     public PlayerBaseState Idle()
@@ -54,5 +62,14 @@ public class PlayerStateFactory
     public PlayerBaseState Fall()
     {
         return _states[PlayerStates.fall];
+    }
+
+    public PlayerBaseState PrimaryFire()
+    {
+        return _states[PlayerStates.primaryfire];
+    }
+    public PlayerBaseState SecondaryFire()
+    {
+        return _states[PlayerStates.secondaryfire];
     }
 }

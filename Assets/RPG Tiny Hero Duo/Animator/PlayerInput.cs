@@ -53,6 +53,42 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrimaryFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0e9d866-289b-4d7d-b0d5-b85607198e9e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondaryFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""5e6e2e08-fd66-4bec-9d47-de2c7f9952f1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LockOn"",
+                    ""type"": ""Button"",
+                    ""id"": ""93cebb38-bda1-4e26-a868-71781e4ce021"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Special"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0128191-d64d-407c-9cf1-0c27a098d085"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -136,7 +172,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ca82a432-f736-4148-839c-b26238b08790"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -165,6 +201,94 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c832c028-aacb-4184-b0f7-a7d364bd36ea"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b3aba55-2e2f-47f0-b51c-49de68779ddb"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a782287-e087-4589-9555-cdea13bdcf32"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1467738-f1e5-4fc4-8025-7fe1d3530e0b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b2e8e1f-1fec-4c10-b652-b11c7401d5d2"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockOn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9ea9b57-ad8f-4bdf-b298-71ac4c805ddb"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LockOn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d4ba079-8341-44a2-98ae-bc8e84e80727"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53ec7b41-edfe-40c4-89ea-44a601009fd6"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Special"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -176,6 +300,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_CharacterControls_Move = m_CharacterControls.FindAction("Move", throwIfNotFound: true);
         m_CharacterControls_Run = m_CharacterControls.FindAction("Run", throwIfNotFound: true);
         m_CharacterControls_Jump = m_CharacterControls.FindAction("Jump", throwIfNotFound: true);
+        m_CharacterControls_PrimaryFire = m_CharacterControls.FindAction("PrimaryFire", throwIfNotFound: true);
+        m_CharacterControls_SecondaryFire = m_CharacterControls.FindAction("SecondaryFire", throwIfNotFound: true);
+        m_CharacterControls_LockOn = m_CharacterControls.FindAction("LockOn", throwIfNotFound: true);
+        m_CharacterControls_Special = m_CharacterControls.FindAction("Special", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -240,6 +368,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Move;
     private readonly InputAction m_CharacterControls_Run;
     private readonly InputAction m_CharacterControls_Jump;
+    private readonly InputAction m_CharacterControls_PrimaryFire;
+    private readonly InputAction m_CharacterControls_SecondaryFire;
+    private readonly InputAction m_CharacterControls_LockOn;
+    private readonly InputAction m_CharacterControls_Special;
     public struct CharacterControlsActions
     {
         private @PlayerInput m_Wrapper;
@@ -247,6 +379,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_CharacterControls_Move;
         public InputAction @Run => m_Wrapper.m_CharacterControls_Run;
         public InputAction @Jump => m_Wrapper.m_CharacterControls_Jump;
+        public InputAction @PrimaryFire => m_Wrapper.m_CharacterControls_PrimaryFire;
+        public InputAction @SecondaryFire => m_Wrapper.m_CharacterControls_SecondaryFire;
+        public InputAction @LockOn => m_Wrapper.m_CharacterControls_LockOn;
+        public InputAction @Special => m_Wrapper.m_CharacterControls_Special;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -265,6 +401,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @PrimaryFire.started += instance.OnPrimaryFire;
+            @PrimaryFire.performed += instance.OnPrimaryFire;
+            @PrimaryFire.canceled += instance.OnPrimaryFire;
+            @SecondaryFire.started += instance.OnSecondaryFire;
+            @SecondaryFire.performed += instance.OnSecondaryFire;
+            @SecondaryFire.canceled += instance.OnSecondaryFire;
+            @LockOn.started += instance.OnLockOn;
+            @LockOn.performed += instance.OnLockOn;
+            @LockOn.canceled += instance.OnLockOn;
+            @Special.started += instance.OnSpecial;
+            @Special.performed += instance.OnSpecial;
+            @Special.canceled += instance.OnSpecial;
         }
 
         private void UnregisterCallbacks(ICharacterControlsActions instance)
@@ -278,6 +426,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @PrimaryFire.started -= instance.OnPrimaryFire;
+            @PrimaryFire.performed -= instance.OnPrimaryFire;
+            @PrimaryFire.canceled -= instance.OnPrimaryFire;
+            @SecondaryFire.started -= instance.OnSecondaryFire;
+            @SecondaryFire.performed -= instance.OnSecondaryFire;
+            @SecondaryFire.canceled -= instance.OnSecondaryFire;
+            @LockOn.started -= instance.OnLockOn;
+            @LockOn.performed -= instance.OnLockOn;
+            @LockOn.canceled -= instance.OnLockOn;
+            @Special.started -= instance.OnSpecial;
+            @Special.performed -= instance.OnSpecial;
+            @Special.canceled -= instance.OnSpecial;
         }
 
         public void RemoveCallbacks(ICharacterControlsActions instance)
@@ -300,5 +460,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnPrimaryFire(InputAction.CallbackContext context);
+        void OnSecondaryFire(InputAction.CallbackContext context);
+        void OnLockOn(InputAction.CallbackContext context);
+        void OnSpecial(InputAction.CallbackContext context);
     }
 }

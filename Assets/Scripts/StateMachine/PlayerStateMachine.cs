@@ -8,6 +8,8 @@ public class PlayerStateMachine : MonoBehaviour
     //Reference variables declarations
     PlayerInput _playerInput;
     CharacterController _characterController;
+    PlayerCombatController _playerCombatController;
+    RuntimeAnimatorController _animatorController;
     Animator _animator;
 
     //Hash variables to store optimized setter/getter parameters
@@ -16,7 +18,12 @@ public class PlayerStateMachine : MonoBehaviour
     int _isJumpingHash;
     int _isFallingHash;
     bool _requireNewJumpPress;
+    bool _requireNewPrimaryFirePress;
     int _jumpCountHash;
+    int _attackComboCountHash;
+    int _isSwordAndShieldAttackingHash;
+    int _isDefendingHash;
+    int _isAimingHash;
 
     //Variables to store player input values
     Vector2 _currentMovementInput;
@@ -25,6 +32,11 @@ public class PlayerStateMachine : MonoBehaviour
     Vector3 _appliedMovement;
     bool _isMovementPressed;
     bool _isRunPressed;
+
+    //Player combat variables
+    bool _isPrimaryFirePressed;
+    bool _isSecondaryFirePressed;
+    int _attackComboCount = 0;
 
     //Constants
     float _rotationFactorPerFrame = 15.0f;
@@ -45,6 +57,7 @@ public class PlayerStateMachine : MonoBehaviour
     Dictionary<int, float> _initialJumpVelocities = new Dictionary<int, float>();
     Dictionary<int, float> _jumpGravities = new Dictionary<int, float>();
     Coroutine _currentJumpResetRoutine = null;
+    Coroutine _currentComboAttackRoutine = null;
 
     //State variables
     PlayerBaseState _currentState;
@@ -54,18 +67,27 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
     public Animator Animator { get { return _animator; } }
     public CharacterController CharacterController { get { return _characterController; } }
+    public PlayerCombatController PlayerCombatController { get { return _playerCombatController; } }
+    public RuntimeAnimatorController AnimatorController { get { return _animatorController; } }
     public Coroutine CurrentJumpResetRoutine { get { return _currentJumpResetRoutine; } set { _currentJumpResetRoutine = value; } }
+    public Coroutine CurrentComboAttackResetRoutine { get { return _currentComboAttackRoutine; } set { _currentComboAttackRoutine = value; } }
     public Dictionary<int, float> InitialJumpVelocities { get { return _initialJumpVelocities; } }
     public Dictionary<int, float> JumpGravities { get { return _jumpGravities; } }
     public int JumpCount { get { return _jumpCount; } set { _jumpCount = value; } }
+    public int AttackComboCount { get { return _attackComboCount; } set { _attackComboCount = value; } }
     public int IsWalkingHash { get { return _isWalkingHash; } }
     public int IsRunningHash { get { return _isRunningHash; } }
     public int IsJumpingHash { get { return _isJumpingHash; } }
     public int JumpCountHash { get { return _jumpCountHash; } }
+    public int AttackComboCountHash { get { return _attackComboCountHash; } }
     public int IsFallingHash { get { return _isFallingHash; } }
+    public int IsSwordAndShieldAttackingHash { get { return _isSwordAndShieldAttackingHash; } }
     public bool IsMovementPressed { get { return _isMovementPressed; } }
     public bool IsRunPressed { get { return _isRunPressed; } }
+    public bool IsPrimaryFirePressed { get { return _isPrimaryFirePressed; } }
+    public bool IsSecondaryFirePressed { get { return _isSecondaryFirePressed; } }
     public bool RequireNewJumpPress { get { return _requireNewJumpPress; } set { _requireNewJumpPress = value; } }
+    public bool RequireNewPrimaryFirePress { get { return _requireNewPrimaryFirePress; } set { _requireNewPrimaryFirePress = value; } }
     public bool IsJumping { set { _isJumping = value; } }
     public bool IsJumpPressed { get { return _isJumpPressed; } }
     public float GroundedGravity { get { return _groundedGravity; } }
@@ -81,6 +103,7 @@ public class PlayerStateMachine : MonoBehaviour
         // Set reference variables
         _playerInput = new PlayerInput();
         _characterController = GetComponent<CharacterController>();
+        _playerCombatController = GetComponent<PlayerCombatController>();
         _animator = GetComponent<Animator>();
 
         // Set up state
@@ -94,6 +117,9 @@ public class PlayerStateMachine : MonoBehaviour
         _isJumpingHash = Animator.StringToHash("isJumping");
         _jumpCountHash = Animator.StringToHash("jumpCount");
         _isFallingHash = Animator.StringToHash("isFalling");
+        _isSwordAndShieldAttackingHash = Animator.StringToHash("swordAndShieldAttack");
+        _isDefendingHash = Animator.StringToHash("isDefending");
+        _isAimingHash = Animator.StringToHash("isAiming");
 
         // Detects movement player input from the character controller
         _playerInput.CharacterControls.Move.started += onMovementInput;
@@ -105,9 +131,19 @@ public class PlayerStateMachine : MonoBehaviour
         _playerInput.CharacterControls.Run.canceled += onRun;
 
         // Detects jump player input from the character controller
+        /*
         _playerInput.CharacterControls.Jump.started += onJump;
         _playerInput.CharacterControls.Jump.canceled += onJump;
+        
 
+        // Detects attack player input from the character controller
+        _playerInput.CharacterControls.PrimaryFire.started += onPrimaryFire;
+        _playerInput.CharacterControls.PrimaryFire.canceled += onPrimaryFire;
+
+        // Detects secondary attack player input from the character controller
+        _playerInput.CharacterControls.SecondaryFire.started += onSecondaryFire;
+        _playerInput.CharacterControls.SecondaryFire.canceled += onSecondaryFire;
+        */
         _animator.applyRootMotion = false;
         setupJumpVariables();
     }
@@ -146,7 +182,10 @@ public class PlayerStateMachine : MonoBehaviour
     {
         handleRotation();
         _currentState.UpdateStates();
-        _characterController.Move(_appliedMovement * Time.deltaTime * _speed);
+        if (!PlayerCombatController.IsAttacking)
+        {
+            _characterController.Move(_appliedMovement * Time.deltaTime * _speed);
+        }
     }
 
     void handleRotation()
@@ -183,26 +222,59 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
     // Takes Jump input from player controller and triggers isJumpPressed once the jump button is pressed
+    /*
     void onJump(InputAction.CallbackContext context)
     {
         _isJumpPressed = context.ReadValueAsButton();
         _requireNewJumpPress = false;
     }
-
+    */
 
     // Takes Run input from player controller and triggers isRunPressed once the run button is pressed
     void onRun(InputAction.CallbackContext context)
     {
         _isRunPressed = context.ReadValueAsButton();
     }
+    
+    void onPrimaryFire(InputAction.CallbackContext context)
+    {
+        _isPrimaryFirePressed = context.ReadValueAsButton();
+    }
+
+    void onSecondaryFire(InputAction.CallbackContext context)
+    {
+        _isSecondaryFirePressed = context.ReadValueAsButton();
+    }
 
     private void OnEnable()
     {
         _playerInput.CharacterControls.Enable();
+
+        //_playerInput.CharacterControls.PrimaryFire.started += HandlePrimaryFire;
     }
 
     private void OnDisable()
     {
         _playerInput.CharacterControls.Disable();
+
+       // _playerInput.CharacterControls.PrimaryFire.started -= HandlePrimaryFire;
     }
+
+    /*
+    void HandlePrimaryFire(InputAction.CallbackContext ctx)
+    {
+        if (AttackComboCount < 3 && CurrentComboAttackResetRoutine != null)
+        {
+            StopCoroutine(CurrentComboAttackResetRoutine);
+        }
+        Animator.SetTrigger(IsSwordAndShieldAttackingHash);
+        AttackComboCount++;
+        Animator.SetInteger(AttackComboCountHash, AttackComboCount);
+    }
+    IEnumerator IAttackResetRoutine()
+    {
+        yield return new WaitForSeconds(.5f);
+        AttackComboCount = 0;
+    }
+    */
 }
