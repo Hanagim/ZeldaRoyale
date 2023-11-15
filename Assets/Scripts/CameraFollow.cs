@@ -11,6 +11,24 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        if (target == null)
+        {
+
+            var playersToFollow = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var player in playersToFollow)
+            {
+                if (player.GetComponent<Character>().isPlayer)
+                {
+                    target = player.gameObject.transform;
+                }
+            }
+        }
+
+        if (target == null)
+        {
+            return;
+        }
+
         targetVector3.x = target.transform.position.x;
         targetVector3.y = 6.0f;
         targetVector3.z= target.transform.position.z - 6.0f;
