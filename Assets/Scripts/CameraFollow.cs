@@ -17,7 +17,7 @@ public class CameraFollow : MonoBehaviour
             var playersToFollow = GameObject.FindGameObjectsWithTag("Player");
             foreach (var player in playersToFollow)
             {
-                if (player.GetComponent<Character>().isPlayer)
+                if (player.GetComponent<Character>().IsPlayer)
                 {
                     target = player.gameObject.transform;
                 }
@@ -30,8 +30,8 @@ public class CameraFollow : MonoBehaviour
         }
 
         targetVector3.x = target.transform.position.x;
-        targetVector3.y = 6.0f;
-        targetVector3.z= target.transform.position.z - 6.0f;
+        targetVector3.y = target.transform.position.y + 6.0f;
+        targetVector3.z= target.transform.position.z - 10.0f;
         transform.position = targetVector3;
     }
 }

@@ -23,6 +23,7 @@ public class Character : NetworkBehaviour
     [Range(0, 1)]
     public float airControl = 0.5f;
 
+    public int MaxHealth = 100;
 
     public StateMachine movementSM;
     public StandingState standing;
@@ -50,19 +51,22 @@ public class Character : NetworkBehaviour
     private CapsuleCollider weaponCollider;
 
     // Networking variables
-    public bool isPlayer;
-
+    public bool IsPlayer;
+    public NetworkVariable<int> PlayerHealth = new();
+    public NetworkVariable<int> HatIndex = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         gameObject.name = $"Player {OwnerClientId}";
-        isPlayer = IsOwner;
+        IsPlayer = IsOwner;
         Debug.Log("player spawned");
 
+        PlayerHealth.Value = MaxHealth;
+
         controller = GetComponent<CharacterController>();
-        controller.enabled = isPlayer;
-        if (!isPlayer)
+        controller.enabled = IsPlayer;
+        if (!IsPlayer)
         {
             return;
         }
@@ -88,7 +92,7 @@ public class Character : NetworkBehaviour
 
     private void Update()
     {
-        if (!isPlayer)
+        if (!IsPlayer)
         {
             return;
         }
@@ -101,7 +105,7 @@ public class Character : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!isPlayer)
+        if (!IsPlayer)
         {
             return;
         }
@@ -138,6 +142,8 @@ public class Character : NetworkBehaviour
     {
         HitClientRpc();
         Debug.Log(OwnerClientId + " was hit");
+        PlayerHealth.Value -= 10;
+        Debug.Log("Player health = " + PlayerHealth.Value);
     }
 
     [ClientRpc]
